@@ -5,7 +5,6 @@ import Text "mo:core/Text";
 import Runtime "mo:core/Runtime";
 import List "mo:core/List";
 import Array "mo:core/Array";
-import Int "mo:core/Int";
 import Iter "mo:core/Iter";
 
 import MixinAuthorization "authorization/MixinAuthorization";

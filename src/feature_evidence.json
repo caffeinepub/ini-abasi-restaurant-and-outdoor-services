@@ -2,8 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-keep-all-user-facing-admin-access-denied-text-in-english-and-ensure-the-existing-frontend-admin-gating-continues-to-work-without-editing-any-immutable-frontend-hook-files-do-not-change-frontend-src-hooks-useinternetidentity-ts-x-or-frontend-src-hooks-useactor-ts-if-any-frontend-change-is-needed-implement-it-only-in-non-immutable-files-and-keep-the-current-ux-retry-access-check-sign-out-return-to-home",
-      "featureTitle": "Keep all user-facing admin/access-denied text in English, and ensure the existing frontend admin gating continues to work without editing any immutable frontend hook files (do not change `frontend/src/hooks/useInternetIdentity.ts(x)` or `frontend/src/hooks/useActor.ts`). If any frontend change is needed, implement it only in non-immutable files and keep the current UX (Retry access check, Sign out, Return to Home).",
+      "featureId": "feature-keep-all-user-facing-admin-auth-messaging-in-english-and-preserve-the-current-admin-gating-ux-retry-access-check-sign-out-return-to-home-and-the-access-code-entry-panel-without-editing-immutable-frontend-hook-files",
+      "featureTitle": "Keep all user-facing admin/auth messaging in English and preserve the current admin gating UX (Retry access check, Sign out, Return to Home, and the access-code entry panel), without editing immutable frontend hook files.",
       "files": [
         "frontend/src/components/admin/AdminGate.tsx"
       ],
@@ -16,7 +16,7 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-38"
+        "REQ-45"
       ],
       "confidence": "high"
     }

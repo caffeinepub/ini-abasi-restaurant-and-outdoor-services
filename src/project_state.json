@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 11,
+  "projectStateVersion": 15,
   "summary": "Mobile-first, SEO-optimized cultural/traditional cuisine website for Ini-Abasi Restaurant and Outdoor Services featuring African & continental dishes, pastries, natural drinks, and event catering, with specified branding and key site pages plus Google Maps/local search optimization, and a full SUPER-ADMIN/OWNER dashboard that gives the restaurant owner unrestricted control over site content/settings without changing the public site design.",
   "architectural_notes": [
     "Mobile-first responsive layout as a primary requirement",
@@ -9,12 +9,15 @@
     "Site IA includes Home, Menu, Gallery, About, Contact, Order/Reserve",
     "Add a separate SUPER-ADMIN/OWNER admin panel that does not alter the public site UI.",
     "No vendor lock-in: owner must be able to export/backup all website data and retain full access control (cannot be locked out).",
-    "Admin authorization system appears to rely on modules (e.g., authorization/MixinAuthorization and authorization/access-control) imported by main.mo; if these modules are missing, admin checks/bootstrapping cannot function and will always deny access."
+    "Admin authorization system appears to rely on modules (e.g., authorization/MixinAuthorization and authorization/access-control) imported by main.mo; if these modules are missing, admin checks/bootstrapping cannot function and will always deny access.",
+    "Consider restricting first-time SUPER-ADMIN/owner bootstrap behind a shared access code/secret (admin token) rather than auto-granting the first authenticated principal."
   ],
   "known_issues": [
     "Admin dashboard shows 'Access Denied' after attempted Internet Identity login; initial owner/super-admin bootstrap or authorization check appears not to be working as expected for first-time setup.",
     "Admin dashboard still shows 'Access Denied' after Internet Identity login; suspected cause is missing backend authorization modules (e.g., authorization/MixinAuthorization and authorization/access-control), preventing first-admin bootstrap and causing isAdmin checks to always return false.",
-    "Automated build/implementation attempts are failing with 'AI couldn't implement/struggled with your request', blocking deployment of the authorization fix."
+    "Automated build/implementation attempts are failing with 'AI couldn't implement/struggled with your request', blocking deployment of the authorization fix.",
+    "After deploying v5/live, admin dashboard still shows the same 'Access Denied' error (fix not effective yet).",
+    "After deploying Version 6 (admin-with-access-code flow), the admin authorization/login still does not work; user reports it \"still not work\"."
   ],
   "isFixRequest": true,
   "existing_features": [
@@ -217,6 +220,30 @@
         "REQ-38"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-access-code-entry-ui-for-authenticated-users-so-they-can-enter-the-access-code-and-have-it-stored-under-the-key-caffeineadmintoken-in-sessionstorage-enabling-the-existing-useactor-initialization-getsecretparameter-caffeineadmintoken-without-editing-immutable-hook-files",
+      "title": "Add an admin access-code entry UI for authenticated users so they can enter the access code and have it stored under the key `caffeineAdminToken` in `sessionStorage`, enabling the existing `useActor` initialization (`getSecretParameter('caffeineAdminToken')`) without editing immutable hook files.",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-keep-all-user-facing-admin-auth-messaging-in-english-and-preserve-the-existing-admingate-ux-retry-access-check-sign-out-return-to-home-while-integrating-the-access-code-flow",
+      "title": "Keep all user-facing admin/auth messaging in English and preserve the existing AdminGate UX (Retry access check, Sign out, Return to Home) while integrating the access-code flow.",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-keep-all-user-facing-admin-auth-messaging-in-english-and-preserve-the-current-admin-gating-ux-retry-access-check-sign-out-return-to-home-and-the-access-code-entry-panel-without-editing-immutable-frontend-hook-files",
+      "title": "Keep all user-facing admin/auth messaging in English and preserve the current admin gating UX (Retry access check, Sign out, Return to Home, and the access-code entry panel), without editing immutable frontend hook files.",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -351,6 +378,44 @@
       "summary": "Expose and wire the exact backend methods expected by the existing frontend admin flow: `isCallerAdmin()` (used by `frontend/src/hooks/useAdminStatus.ts`) and `_initializeAccessControlWithSecret(adminToken)` (called from `frontend/src/hooks/useActor.ts`). These methods must work together to enable first-time admin bootstrap and subsequent admin checks.",
       "reqIds": [
         "REQ-37"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-39",
+      "summary": "Add an access-code (admin token) based admin initialization flow so a principal can become SUPER-ADMIN/owner only by providing the correct access code/secret (instead of automatically granting the first logged-in principal), leveraging the existing `_initializeAccessControlWithSecret(adminToken)` mechanism.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-40",
+      "summary": "Implement/repair backend admin authorization so that a logged-in Internet Identity principal becomes an admin only after successfully initializing with the access code secret \"01622610\", using the existing `_initializeAccessControlWithSecret(adminToken)` flow and ensuring `isCallerAdmin()` correctly reflects the resulting admin status.",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-41",
+      "summary": "Implement/repair backend admin authorization so the frontend’s existing access-code flow can successfully grant admin access when the correct access code is provided, and deny access otherwise.",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-42",
+      "summary": "Ensure the backend method `_initializeAccessControlWithSecret(adminToken)` is safe to call during actor initialization even when the token is missing/empty/invalid, so the frontend actor creation path never fails due to a trap from this method.",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-43",
+      "summary": "Expose and wire the exact admin status API expected by the existing frontend (`isCallerAdmin()`), and ensure it reflects the backend’s stored admin authorization state produced by the access-code initialization flow.",
+      "reqIds": [
+        "REQ-44"
       ],
       "status": "pending"
     }

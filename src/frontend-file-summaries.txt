@@ -43,8 +43,8 @@
   "frontend/src/hooks/useBackupRestore.ts": "React Query mutation hooks for exporting and importing all website data with full cache invalidation on restore.",
   "frontend/src/components/admin/ProfileSetupDialog.tsx": "Modal dialog for first-time admin profile setup requiring name and optional email, prevents dismissal until completed.",
   "frontend/src/components/admin/AdminLoginPanel.tsx": "Internet Identity login panel for admin access with loading states, removed error handling for non-existent error status.",
-  "frontend/src/components/admin/AdminAccessDenied.tsx": "Access denied screen for authenticated non-admin users with Sign out, Retry access check, and Return to Home actions.",
-  "frontend/src/components/admin/AdminGate.tsx": "Authorization guard component that handles authentication, admin verification with post-login refresh logic to avoid stale admin status, profile setup flow, and provides sign out and retry functionality for access denied scenarios.",
+  "frontend/src/components/admin/AdminAccessDenied.tsx": "Access denied screen for authenticated non-admin users with Sign out, Retry access check, and Return to Home actions, now integrated with AdminAccessCodePanel below a separator for entering an access code.",
+  "frontend/src/components/admin/AdminGate.tsx": "Authorization guard component that handles authentication, admin verification with post-login refresh logic and cache invalidation, profile setup flow, and provides sign out and retry functionality with proper query cache invalidation before refetch.",
   "frontend/src/components/admin/settings/SiteSettingsAdminPanel.tsx": "Admin panel for managing location/contact information and opening hours with forms and validation.",
   "frontend/src/components/admin/settings/ActionButtonsAdminPanel.tsx": "Admin panel for configuring WhatsApp, call, and order button settings with enable/disable toggles.",
   "frontend/src/components/admin/promotions/PromotionsAdminPanel.tsx": "Admin panel for creating, editing, and deleting promotional banners with ordering and active status controls.",
@@ -52,5 +52,6 @@
   "frontend/src/components/admin/backup/BackupRestorePanel.tsx": "Admin panel for exporting website data as JSON and importing backups with preview and validation.",
   "frontend/src/pages/admin/AdminPage.tsx": "Main admin dashboard with tabbed interface for all management panels, protected by AdminGate with logout functionality.",
   "frontend/src/pages/CustomPage.tsx": "Public page renderer for custom pages fetched by slug with SEO support and 404 handling.",
-  "frontend/src/components/promotions/PromotionsStrip.tsx": "Non-disruptive banner component displaying active promotions with dismiss functionality, renders nothing when empty."
+  "frontend/src/components/promotions/PromotionsStrip.tsx": "Non-disruptive banner component displaying active promotions with dismiss functionality, renders nothing when empty.",
+  "frontend/src/components/admin/AdminAccessCodePanel.tsx": "New component providing a form for authenticated users to enter an admin access code, which is stored in sessionStorage and triggers a page reload to re-initialize the actor with admin privileges."
 }

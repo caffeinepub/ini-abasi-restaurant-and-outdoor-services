@@ -1,54 +1,61 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-10T11:06:00.561Z",
-  "summary": "The diff only modifies a frontend admin gating component and two project summary files. None of the requested backend authorization modules, bootstrap logic, stable persistence, or required backend methods are added/implemented in the provided changes.",
+  "generatedAt": "2026-02-10T13:05:59.300Z",
+  "summary": "The diff updates backend authorization wiring to use an AccessControl state + MixinAuthorization, and changes the frontend AdminGate to force-refresh admin status after authentication and clear some session parameters. However, the diff summary is truncated and does not show the required backend APIs (`_initializeAccessControlWithSecret`, `isCallerAdmin`) or their non-trapping/persistence behavior, so key requirements cannot be verified as implemented from the provided evidence.",
   "missing_requirements": [
     {
-      "id": "REQ-34",
-      "requirement": "Create the missing Motoko authorization modules referenced by backend/main.mo: add backend/authorization/MixinAuthorization.mo and backend/authorization/access-control.mo (matching import paths authorization/MixinAuthorization and authorization/access-control).",
-      "reason": "No new backend files were added; diff shows \"ADDED FILES: none\" and only frontend/project summary files were modified.",
+      "id": "REQ-42",
+      "requirement": "Backend admin authorization must grant admin for the same principal only after correct access code \"01622610\" via `_initializeAccessControlWithSecret(\"01622610\")`, deny otherwise without trapping, and persist across upgrades.",
+      "reason": "The backend diff excerpt shows `accessControlState` initialization and `MixinAuthorization` inclusion, but does not show implementation/details of `_initializeAccessControlWithSecret`, the hardcoded secret handling, principal-to-admin mapping, or any stable persistence mechanism for upgrades. With truncation, the acceptance criteria cannot be confirmed.",
       "evidence": [
-        "File diff summary: ADDED FILES: none"
+        "backend/main.mo (truncated; shows `let accessControlState = AccessControl.initState(); include MixinAuthorization(accessControlState);` but not the required methods/logic)"
       ]
     },
     {
-      "id": "REQ-35",
-      "requirement": "Implement deterministic owner/admin bootstrap in authorization/access-control.mo so the first authenticated principal becomes owner/admin and also has #user permission.",
-      "reason": "The access-control module is not added/modified in the diff, so bootstrap behavior cannot be implemented based on these changes.",
+      "id": "REQ-43",
+      "requirement": "`_initializeAccessControlWithSecret(adminToken)` must be safe to call during actor initialization even with empty/invalid token and must not trap.",
+      "reason": "The diff summary does not include `_initializeAccessControlWithSecret` or any explicit handling for empty/invalid token values; therefore non-trapping behavior cannot be verified.",
       "evidence": [
-        "File diff summary: ADDED FILES: none",
-        "File diff summary: MODIFIED FILES includes only frontend/src/components/admin/AdminGate.tsx, frontend-file-summaries.txt, project_state.json"
+        "backend/main.mo (truncated; `_initializeAccessControlWithSecret` not shown)"
       ]
     },
     {
-      "id": "REQ-36",
-      "requirement": "Persist authorization state across canister upgrades using stable storage (owner/admin and permission mappings), adding migration support only if required.",
-      "reason": "No backend Motoko code changes are shown that add stable variables/upgrade hooks or any persistence mechanism.",
+      "id": "REQ-44",
+      "requirement": "Expose `isCallerAdmin()` as a query that never traps and reflects admin authorization state from the access-code initialization flow.",
+      "reason": "The diff summary does not show `isCallerAdmin()` being defined as a query method, nor its boolean return/non-trapping behavior.",
       "evidence": [
-        "File diff summary: MODIFIED FILES includes only frontend/src/components/admin/AdminGate.tsx, frontend-file-summaries.txt, project_state.json"
+        "backend/main.mo (truncated; `isCallerAdmin()` not shown)"
       ]
     },
     {
-      "id": "REQ-37",
-      "requirement": "Expose and wire backend methods isCallerAdmin() and _initializeAccessControlWithSecret(adminToken) expected by the frontend admin flow.",
-      "reason": "No backend changes are shown; therefore these methods are not added or wired in backend/main.mo in the provided diff.",
+      "id": "REQ-45",
+      "requirement": "Preserve current admin gating UX (Retry access check, Sign out, Return to Home, access-code entry panel) with English messaging, without editing immutable frontend hooks.",
+      "reason": "While `AdminGate.tsx` is modified, the diff summary does not include `AdminAccessDenied` or the actual UI text/actions for Retry/Sign out/Return Home/access-code entry panel, so preservation of the exact UX cannot be confirmed from provided evidence (though hook files are not shown as modified).",
       "evidence": [
-        "File diff summary: MODIFIED FILES includes only frontend/src/components/admin/AdminGate.tsx, frontend-file-summaries.txt, project_state.json"
+        "frontend/src/components/admin/AdminGate.tsx (references `AdminAccessDenied` and `AdminLoginPanel`, but their contents are not shown)"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Added client-side logic to force a one-time admin status refetch immediately after authentication (post-auth refresh tracking via useRef and useEffect) and a new loading state while refetching.",
-      "reason": "The BuildRequest focuses on restoring backend authorization modules/bootstrapping and keeping frontend gating working without changing immutable hooks; it does not explicitly request changing AdminGate behavior to perform a post-auth refetch or adjust loading conditions.",
+      "description": "Added/expanded user profile authorization checks and profile management API behavior that traps on unauthorized access (e.g., `getCallerUserProfile`, `getUserProfile`, `saveCallerUserProfile`).",
+      "reason": "The BuildRequest focuses on fixing admin access-code authorization (`_initializeAccessControlWithSecret`, `isCallerAdmin`) and preserving frontend admin gating UX; it does not request adding or changing user profile management/authorization behavior.",
       "evidence": [
-        "frontend/src/components/admin/AdminGate.tsx"
+        "backend/main.mo (shows `public query func getCallerUserProfile()`, `getUserProfile(user : Principal)`, `saveCallerUserProfile(profile : UserProfile)` with `Runtime.trap(\"Unauthorized: ...\")`)"
+      ]
+    },
+    {
+      "description": "Frontend AdminGate adds post-auth automatic admin-status refresh logic and session-parameter clearing behavior (`caffeineAdminTokenAttempted`) beyond preserving the existing UX.",
+      "reason": "REQ-45 asks to preserve the current admin gating UX and keep messaging in English, but does not request altering the admin gate behavior to force-refresh after auth or manage these session parameters.",
+      "evidence": [
+        "frontend/src/components/admin/AdminGate.tsx (adds `hasRefreshedAfterAuth`/`previousAuthState` logic, invalidates/refetches `['isAdmin']`, clears `caffeineAdminTokenAttempted`, clears `caffeineAdminToken` and `caffeineAdminTokenAttempted` on sign out)"
       ]
     }
   ],
-  "confidence": 0.88,
+  "confidence": 0.56,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
     "frontend/src/components/admin/AdminGate.tsx",
     "project_state.json"

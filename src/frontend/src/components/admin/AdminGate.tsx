@@ -6,6 +6,7 @@ import AdminLoginPanel from './AdminLoginPanel';
 import AdminAccessDenied from './AdminAccessDenied';
 import ProfileSetupDialog from './ProfileSetupDialog';
 import { Loader2 } from 'lucide-react';
+import { clearSessionParameter } from '../../utils/urlParams';
 
 interface AdminGateProps {
   children: ReactNode;
@@ -30,6 +31,8 @@ export default function AdminGate({ children }: AdminGateProps) {
     if (justAuthenticated && !hasRefreshedAfterAuth.current && !adminLoading) {
       // User just logged in - force a fresh admin check
       hasRefreshedAfterAuth.current = true;
+      // Invalidate before refetch to ensure fresh data
+      queryClient.invalidateQueries({ queryKey: ['isAdmin'] });
       refetch();
     }
     
@@ -39,7 +42,14 @@ export default function AdminGate({ children }: AdminGateProps) {
     if (!isAuthenticated) {
       hasRefreshedAfterAuth.current = false;
     }
-  }, [isAuthenticated, adminLoading, refetch]);
+  }, [isAuthenticated, adminLoading, refetch, queryClient]);
+
+  // Clear the attempt flag if user successfully becomes admin
+  useEffect(() => {
+    if (isAdmin) {
+      clearSessionParameter('caffeineAdminTokenAttempted');
+    }
+  }, [isAdmin]);
 
   // Show loading while initializing or during the post-auth refresh
   if (isInitializing || (isAuthenticated && (adminLoading || isRefetching))) {
@@ -62,10 +72,14 @@ export default function AdminGate({ children }: AdminGateProps) {
   const handleSignOut = async () => {
     await clear();
     queryClient.clear();
+    // Clear access code tokens on sign out
+    clearSessionParameter('caffeineAdminToken');
+    clearSessionParameter('caffeineAdminTokenAttempted');
   };
 
-  // Handle retry access check
+  // Handle retry access check - invalidate cache before refetch
   const handleRetry = async () => {
+    await queryClient.invalidateQueries({ queryKey: ['isAdmin'] });
     await refetch();
   };
 

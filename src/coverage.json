@@ -1,46 +1,39 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-10T11:06:00.565Z",
+  "generatedAt": "2026-02-10T13:05:59.303Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 5,
+    "total": 4,
     "implemented": 1,
     "items": [
       {
-        "id": "REQ-34",
-        "summary": "Create the missing Motoko authorization modules referenced by `backend/main.mo` so the backend compiles: add `backend/authorization/MixinAuthorization.mo` and `backend/authorization/access-control.mo` (matching the exact import paths `authorization/MixinAuthorization` and `authorization/access-control`).",
+        "id": "REQ-42",
+        "summary": "Implement/repair backend admin authorization so the frontend’s existing access-code flow can successfully grant admin access when the correct access code is provided, and deny access otherwise.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-35",
-        "summary": "Implement a deterministic owner/admin bootstrap in the new `authorization/access-control.mo` module: when no owner/admin exists yet, the first authenticated Internet Identity principal that hits the admin authorization flow is automatically set as the owner/admin and also granted the `#user` permission required for profile actions.",
+        "id": "REQ-43",
+        "summary": "Ensure the backend method `_initializeAccessControlWithSecret(adminToken)` is safe to call during actor initialization even when the token is missing/empty/invalid, so the frontend actor creation path never fails due to a trap from this method.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-36",
-        "summary": "Persist authorization state across canister upgrades using stable storage (owner/admin and any permission mappings needed by the admin UI), and add conditional migration support only if required by the current project state (do not add `backend/migration.mo` unless upgrading existing stable state schema).",
+        "id": "REQ-44",
+        "summary": "Expose and wire the exact admin status API expected by the existing frontend (`isCallerAdmin()`), and ensure it reflects the backend’s stored admin authorization state produced by the access-code initialization flow.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-37",
-        "summary": "Expose and wire the exact backend methods expected by the existing frontend admin flow: `isCallerAdmin()` (used by `frontend/src/hooks/useAdminStatus.ts`) and `_initializeAccessControlWithSecret(adminToken)` (called from `frontend/src/hooks/useActor.ts`). These methods must work together to enable first-time admin bootstrap and subsequent admin checks.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-38",
-        "summary": "Keep all user-facing admin/access-denied text in English, and ensure the existing frontend admin gating continues to work without editing any immutable frontend hook files (do not change `frontend/src/hooks/useInternetIdentity.ts(x)` or `frontend/src/hooks/useActor.ts`). If any frontend change is needed, implement it only in non-immutable files and keep the current UX (Retry access check, Sign out, Return to Home).",
+        "id": "REQ-45",
+        "summary": "Keep all user-facing admin/auth messaging in English and preserve the current admin gating UX (Retry access check, Sign out, Return to Home, and the access-code entry panel), without editing immutable frontend hook files.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/admin/AdminGate.tsx"
@@ -52,6 +45,7 @@
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",

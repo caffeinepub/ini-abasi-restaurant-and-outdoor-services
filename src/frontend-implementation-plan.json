@@ -1,21 +1,21 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Frontend-only: preserve existing admin gating UX while backend authorization bootstrap is fixed",
+  "title": "Preserve admin gating UX while ensuring reliable re-check after access-code authorization",
   "requirements": [
     {
-      "id": "REQ-38",
-      "summary": "Keep admin/access-denied UX in English and ensure admin gating continues to work without modifying immutable auth/actor hooks.",
+      "id": "REQ-45",
+      "summary": "Preserve the existing English Admin Access Denied UX and avoid immutable hook changes while making the Retry access check reliably refresh admin status after backend authorization fixes.",
       "acceptanceCriteria": [
-        "No changes are made to files listed as immutable paths in SYSTEM_CONTEXT (including `frontend/src/hooks/useActor.ts`).",
-        "Admin Access Denied screen continues to show English text and the same actions (Retry access check, Sign out, Return to Home).",
-        "After the backend authorization fix, an authenticated first-time user can access the admin dashboard (AdminGate passes) without getting stuck on Access Denied."
+        "No changes are made to any immutable frontend paths listed in SYSTEM_CONTEXT (including `frontend/src/hooks/useInternetIdentity.ts(x)` and `frontend/src/hooks/useActor.ts`).",
+        "The Admin Access Denied screen continues to show English text and provides: Retry access check, Sign out, Return to Home, and Enter Access Code UI.",
+        "After the backend fix, entering the correct access code and reloading results in the admin dashboard rendering successfully for that principal."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/admin/AdminGate.tsx",
           "operation": "modify",
-          "description": "Harden the admin-gating flow to avoid a stale/early non-admin result right after authentication by triggering a one-time admin status refresh when the user becomes authenticated and the gate is ready, without changing the existing English UX (Login panel, Access Denied actions, profile setup)."
+          "description": "Harden the existing Retry access check flow to force a fresh admin-status evaluation (e.g., invalidate related React Query cache keys before refetch) while keeping the current English admin gating UX unchanged and without editing immutable hook files."
         }
       ]
     }

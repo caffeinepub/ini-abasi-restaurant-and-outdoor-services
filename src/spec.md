@@ -1,13 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Restore missing backend authorization modules and implement a persistent, deterministic admin/owner bootstrap so the first authenticated Internet Identity user can access the admin dashboard.
+**Goal:** Fix backend admin access-code authorization so the existing frontend access-code flow correctly grants admin access (and the admin dashboard no longer shows Access Denied when the correct code is used).
 
 **Planned changes:**
-- Add missing Motoko modules `backend/authorization/MixinAuthorization.mo` and `backend/authorization/access-control.mo` to match the import paths used by `backend/main.mo` and restore backend compilation.
-- Implement access-control logic to bootstrap the first authenticated principal as the persisted owner/admin (and grant `#user` permission) when no admin exists yet.
-- Persist authorization state (owner/admin and required permission mappings) in stable storage to survive canister upgrades, adding migration logic only if required by existing stable schema.
-- Expose and wire backend methods required by the current frontend admin flow: `isCallerAdmin()` and `_initializeAccessControlWithSecret(adminToken)` to support first-time bootstrap and subsequent admin checks.
-- Keep admin/access-denied UX text in English and avoid changes to immutable frontend hook files; only adjust non-immutable frontend files if strictly necessary to preserve the current gating behavior.
+- Repair/implement backend access-code initialization so `_initializeAccessControlWithSecret(adminToken)` never traps (including empty/missing/invalid tokens) and safely sets/does not set admin authorization.
+- Ensure `isCallerAdmin()` is exposed on the backend canister interface as a query, always returns a boolean (never traps), and reflects the stored admin authorization state for the caller’s principal.
+- Persist the authorized admin principal/state in stable storage so admin access remains intact across canister upgrades.
+- Keep the current frontend admin gating UX and English messaging unchanged, without modifying immutable frontend hook files.
 
-**User-visible outcome:** On a fresh deploy, the first authenticated Internet Identity user becomes admin/owner automatically and can access the admin dashboard; admin status persists across upgrades and non-admin users continue to see Access Denied.
+**User-visible outcome:** After signing in with Internet Identity, entering the correct access code (`01622610`) and reloading allows that principal to access the admin dashboard; incorrect or missing codes keep showing the existing Access Denied UI without breaking app load.

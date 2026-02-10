@@ -1,111 +1,93 @@
 {
   "kind": "build_request",
-  "title": "Step-by-step fix: restore missing backend authorization modules and make first Internet Identity user become owner/admin",
+  "title": "Fix admin access-code authorization so the admin dashboard stops showing Access Denied",
   "priority": "high",
   "requirements": [
     {
-      "id": "REQ-34",
-      "text": "Create the missing Motoko authorization modules referenced by `backend/main.mo` so the backend compiles: add `backend/authorization/MixinAuthorization.mo` and `backend/authorization/access-control.mo` (matching the exact import paths `authorization/MixinAuthorization` and `authorization/access-control`).",
+      "id": "REQ-42",
+      "text": "Implement/repair backend admin authorization so the frontend’s existing access-code flow can successfully grant admin access when the correct access code is provided, and deny access otherwise.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-5"
         ],
         "quotes": [
-          "Your backend is still importing two authorization files that do not exist:\n• authorization/MixinAuthorization.mo\n• authorization/access-control.mo",
-          "Try step by step fixing"
+          "It still not work."
         ]
       },
       "acceptanceCriteria": [
-        "Both files exist at `backend/authorization/MixinAuthorization.mo` and `backend/authorization/access-control.mo` and are imported successfully by `backend/main.mo`.",
-        "The backend canister compiles without missing-import errors related to authorization modules."
+        "When an authenticated Internet Identity user has NOT provided the correct access code, `isCallerAdmin()` returns `false` and does not trap.",
+        "When an authenticated Internet Identity user provides the correct access code \"01622610\" (via `_initializeAccessControlWithSecret(\"01622610\")`), subsequent calls to `isCallerAdmin()` return `true` for that same principal.",
+        "An incorrect access code does not grant admin access and does not trap; the caller remains non-admin.",
+        "Admin authorization state persists across canister upgrades (a redeploy/upgrade does not lock out the previously-authorized admin principal)."
       ]
     },
     {
-      "id": "REQ-35",
-      "text": "Implement a deterministic owner/admin bootstrap in the new `authorization/access-control.mo` module: when no owner/admin exists yet, the first authenticated Internet Identity principal that hits the admin authorization flow is automatically set as the owner/admin and also granted the `#user` permission required for profile actions.",
+      "id": "REQ-43",
+      "text": "Ensure the backend method `_initializeAccessControlWithSecret(adminToken)` is safe to call during actor initialization even when the token is missing/empty/invalid, so the frontend actor creation path never fails due to a trap from this method.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-5"
         ],
         "quotes": [
-          "Fix the best way",
-          "Try step by step fixing"
+          "It still not work."
         ]
       },
       "acceptanceCriteria": [
-        "On a fresh install (no stored owner/admin), the first authenticated principal is persisted as owner/admin automatically.",
-        "After bootstrap, `AccessControl.isAdmin(state, caller)` returns true for that principal and false for other principals unless explicitly granted.",
-        "After bootstrap, `AccessControl.hasPermission(state, caller, #user)` returns true for the owner/admin principal."
+        "Calling `_initializeAccessControlWithSecret(\"\")` does not trap and completes successfully.",
+        "Calling `_initializeAccessControlWithSecret(\"wrong\")` does not trap and completes successfully.",
+        "If the frontend has no access code stored yet (empty token), the app still loads and the admin page renders the Access Denied UI instead of failing due to missing actor initialization."
       ]
     },
     {
-      "id": "REQ-36",
-      "text": "Persist authorization state across canister upgrades using stable storage (owner/admin and any permission mappings needed by the admin UI), and add conditional migration support only if required by the current project state (do not add `backend/migration.mo` unless upgrading existing stable state schema).",
+      "id": "REQ-44",
+      "text": "Expose and wire the exact admin status API expected by the existing frontend (`isCallerAdmin()`), and ensure it reflects the backend’s stored admin authorization state produced by the access-code initialization flow.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-5"
         ],
         "quotes": [
-          "Persist admin/owner authorization state across canister upgrades so the restaurant owner cannot be unintentionally locked out after a redeploy/upgrade; add conditional migration support if the stable authorization state schema changes.",
-          "Try step by step fixing"
+          "It still not work."
         ]
       },
       "acceptanceCriteria": [
-        "After redeploy/upgrade, the previously bootstrapped owner/admin principal remains admin without requiring re-bootstrap.",
-        "No new migration file is added unless it is actually necessary to preserve existing stable state."
+        "`isCallerAdmin()` exists on the backend canister interface and is callable as a query from the frontend.",
+        "After a successful `_initializeAccessControlWithSecret(\"01622610\")`, `isCallerAdmin()` returns `true` for that principal without requiring any additional steps.",
+        "`isCallerAdmin()` never traps; it always returns a boolean (false for unauthorized/non-admin callers)."
       ]
     },
     {
-      "id": "REQ-37",
-      "text": "Expose and wire the exact backend methods expected by the existing frontend admin flow: `isCallerAdmin()` (used by `frontend/src/hooks/useAdminStatus.ts`) and `_initializeAccessControlWithSecret(adminToken)` (called from `frontend/src/hooks/useActor.ts`). These methods must work together to enable first-time admin bootstrap and subsequent admin checks.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Ensure the backend exposes and wires the exact admin status API used by the frontend (`actor.isCallerAdmin()`), and that it performs the bootstrap logic as needed (update call if mutation is required), so `frontend/src/hooks/useAdminStatus.ts` can correctly determine admin status.",
-          "await actor._initializeAccessControlWithSecret(adminToken);"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Calling `_initializeAccessControlWithSecret` does not trap for valid inputs and sets up any needed initialization state for subsequent admin checks.",
-        "Calling `isCallerAdmin()` returns `true` for the bootstrapped owner/admin principal and `false` for non-admin principals.",
-        "On first-time setup (no owner/admin yet), the combination of `_initializeAccessControlWithSecret` and/or `isCallerAdmin()` triggers bootstrap so the first authenticated principal becomes admin and the UI no longer shows Access Denied for that principal."
-      ]
-    },
-    {
-      "id": "REQ-38",
-      "text": "Keep all user-facing admin/access-denied text in English, and ensure the existing frontend admin gating continues to work without editing any immutable frontend hook files (do not change `frontend/src/hooks/useInternetIdentity.ts(x)` or `frontend/src/hooks/useActor.ts`). If any frontend change is needed, implement it only in non-immutable files and keep the current UX (Retry access check, Sign out, Return to Home).",
+      "id": "REQ-45",
+      "text": "Keep all user-facing admin/auth messaging in English and preserve the current admin gating UX (Retry access check, Sign out, Return to Home, and the access-code entry panel), without editing immutable frontend hook files.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-5"
         ],
         "quotes": [
-          "Use English for any user-facing text in the build request.",
-          "Try step by step fixing"
+          "It still not work."
         ]
       },
       "acceptanceCriteria": [
-        "No changes are made to files listed as immutable paths in SYSTEM_CONTEXT (including `frontend/src/hooks/useActor.ts`).",
-        "Admin Access Denied screen continues to show English text and the same actions (Retry access check, Sign out, Return to Home).",
-        "After the backend authorization fix, an authenticated first-time user can access the admin dashboard (AdminGate passes) without getting stuck on Access Denied."
+        "No changes are made to any immutable frontend paths listed in SYSTEM_CONTEXT (including `frontend/src/hooks/useInternetIdentity.ts(x)` and `frontend/src/hooks/useActor.ts`).",
+        "The Admin Access Denied screen continues to show English text and provides: Retry access check, Sign out, Return to Home, and Enter Access Code UI.",
+        "After the backend fix, entering the correct access code and reloading results in the admin dashboard rendering successfully for that principal."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single-actor Motoko architecture with all main logic in `backend/main.mo` (authorization modules may be imported but no additional backend services).",
-    "Do not edit immutable frontend paths: `frontend/src/hooks/useInternetIdentity.ts`, `frontend/src/hooks/useInternetIdentity.tsx`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`, and anything under `frontend/src/components/ui`.",
-    "Use English for all user-facing text."
+    "Do not edit immutable frontend hook files: `frontend/src/hooks/useInternetIdentity.ts(x)` and `frontend/src/hooks/useActor.ts`.",
+    "Backend must remain a single Motoko actor with all logic in `backend/main.mo` (respect single-actor architecture).",
+    "Use English for any user-facing text.",
+    "Do not add `backend/migration.mo` unless a stable-state schema change makes it necessary under the conditional migration policy."
   ],
   "nonGoals": [
-    "Adding third-party authentication providers (only Internet Identity is used).",
-    "Changing public-site design, branding, or page content unrelated to admin authorization bootstrap.",
-    "Implementing real-time features (WebSockets/push notifications) or external database integrations."
+    "Adding third-party authentication providers (only Internet Identity is supported).",
+    "Implementing real-time features (WebSockets/push).",
+    "Changing the public website design or content unrelated to admin authorization.",
+    "Introducing external databases or multi-service architectures."
   ],
   "imageRequirements": {
     "required": [],
