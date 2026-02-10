@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useInternetIdentity } from '../../hooks/useInternetIdentity';
 import { useAdminStatus, useGetCallerUserProfile } from '../../hooks/useAdminStatus';
@@ -16,11 +16,33 @@ export default function AdminGate({ children }: AdminGateProps) {
   const { isAdmin, isLoading: adminLoading, refetch, isRefetching } = useAdminStatus();
   const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
   const queryClient = useQueryClient();
+  
+  // Track if we've done the post-auth refresh
+  const hasRefreshedAfterAuth = useRef(false);
+  const previousAuthState = useRef(false);
 
   const isAuthenticated = !!identity;
 
-  // Show loading while initializing
-  if (isInitializing || (isAuthenticated && adminLoading)) {
+  // Trigger a one-time admin status refresh when user becomes authenticated
+  useEffect(() => {
+    const justAuthenticated = isAuthenticated && !previousAuthState.current;
+    
+    if (justAuthenticated && !hasRefreshedAfterAuth.current && !adminLoading) {
+      // User just logged in - force a fresh admin check
+      hasRefreshedAfterAuth.current = true;
+      refetch();
+    }
+    
+    previousAuthState.current = isAuthenticated;
+    
+    // Reset the flag when user logs out
+    if (!isAuthenticated) {
+      hasRefreshedAfterAuth.current = false;
+    }
+  }, [isAuthenticated, adminLoading, refetch]);
+
+  // Show loading while initializing or during the post-auth refresh
+  if (isInitializing || (isAuthenticated && (adminLoading || isRefetching))) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="text-center">

@@ -1,11 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Fix admin authorization bootstrap so the first Internet Identity user on a fresh deploy becomes SUPER-ADMIN/owner, prevent lockouts across canister upgrades, and improve the “Access Denied” recovery actions.
+**Goal:** Restore missing backend authorization modules and implement a persistent, deterministic admin/owner bootstrap so the first authenticated Internet Identity user can access the admin dashboard.
 
 **Planned changes:**
-- Update backend admin authorization logic to auto-grant SUPER-ADMIN/owner to the first Internet Identity principal only when no admins/owner exist yet, so the initial admin setup can succeed.
-- Persist admin/owner authorization state in stable storage so established admins remain authorized after canister upgrades; add conditional migration handling if authorization schema/state changes.
-- Enhance the frontend Access Denied screen with “Sign out” (clears Internet Identity session) and “Retry access check” (re-fetches admin status and loads dashboard if access is granted), keeping existing copy in English.
+- Add missing Motoko modules `backend/authorization/MixinAuthorization.mo` and `backend/authorization/access-control.mo` to match the import paths used by `backend/main.mo` and restore backend compilation.
+- Implement access-control logic to bootstrap the first authenticated principal as the persisted owner/admin (and grant `#user` permission) when no admin exists yet.
+- Persist authorization state (owner/admin and required permission mappings) in stable storage to survive canister upgrades, adding migration logic only if required by existing stable schema.
+- Expose and wire backend methods required by the current frontend admin flow: `isCallerAdmin()` and `_initializeAccessControlWithSecret(adminToken)` to support first-time bootstrap and subsequent admin checks.
+- Keep admin/access-denied UX text in English and avoid changes to immutable frontend hook files; only adjust non-immutable frontend files if strictly necessary to preserve the current gating behavior.
 
-**User-visible outcome:** On a fresh deploy, the first Internet Identity user who signs in at `/admin` can access the admin dashboard; later non-admin users still see Access Denied, and admins stay authorized after upgrades with recovery actions available on the Access Denied screen.
+**User-visible outcome:** On a fresh deploy, the first authenticated Internet Identity user becomes admin/owner automatically and can access the admin dashboard; admin status persists across upgrades and non-admin users continue to see Access Denied.

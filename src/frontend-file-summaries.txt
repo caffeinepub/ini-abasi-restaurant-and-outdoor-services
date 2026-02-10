@@ -44,7 +44,7 @@
   "frontend/src/components/admin/ProfileSetupDialog.tsx": "Modal dialog for first-time admin profile setup requiring name and optional email, prevents dismissal until completed.",
   "frontend/src/components/admin/AdminLoginPanel.tsx": "Internet Identity login panel for admin access with loading states, removed error handling for non-existent error status.",
   "frontend/src/components/admin/AdminAccessDenied.tsx": "Access denied screen for authenticated non-admin users with Sign out, Retry access check, and Return to Home actions.",
-  "frontend/src/components/admin/AdminGate.tsx": "Authorization guard component that handles authentication, admin verification, profile setup flow, and provides sign out and retry functionality for access denied scenarios.",
+  "frontend/src/components/admin/AdminGate.tsx": "Authorization guard component that handles authentication, admin verification with post-login refresh logic to avoid stale admin status, profile setup flow, and provides sign out and retry functionality for access denied scenarios.",
   "frontend/src/components/admin/settings/SiteSettingsAdminPanel.tsx": "Admin panel for managing location/contact information and opening hours with forms and validation.",
   "frontend/src/components/admin/settings/ActionButtonsAdminPanel.tsx": "Admin panel for configuring WhatsApp, call, and order button settings with enable/disable toggles.",
   "frontend/src/components/admin/promotions/PromotionsAdminPanel.tsx": "Admin panel for creating, editing, and deleting promotional banners with ordering and active status controls.",

@@ -2,12 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-improve-the-admin-access-denied-experience-to-help-operators-recover-from-misconfigured-authorization-keep-the-existing-access-denied-copy-in-english-and-add-a-clear-sign-out-action-plus-a-retry-access-check-action-that-re-runs-the-admin-status-query-after-login",
-      "featureTitle": "Improve the admin access denied experience to help operators recover from misconfigured authorization: keep the existing Access Denied copy in English, and add a clear “Sign out” action plus a “Retry access check” action that re-runs the admin status query after login.",
+      "featureId": "feature-keep-all-user-facing-admin-access-denied-text-in-english-and-ensure-the-existing-frontend-admin-gating-continues-to-work-without-editing-any-immutable-frontend-hook-files-do-not-change-frontend-src-hooks-useinternetidentity-ts-x-or-frontend-src-hooks-useactor-ts-if-any-frontend-change-is-needed-implement-it-only-in-non-immutable-files-and-keep-the-current-ux-retry-access-check-sign-out-return-to-home",
+      "featureTitle": "Keep all user-facing admin/access-denied text in English, and ensure the existing frontend admin gating continues to work without editing any immutable frontend hook files (do not change `frontend/src/hooks/useInternetIdentity.ts(x)` or `frontend/src/hooks/useActor.ts`). If any frontend change is needed, implement it only in non-immutable files and keep the current UX (Retry access check, Sign out, Return to Home).",
       "files": [
-        "frontend/src/components/admin/AdminAccessDenied.tsx",
-        "frontend/src/components/admin/AdminGate.tsx",
-        "frontend/src/hooks/useAdminStatus.ts"
+        "frontend/src/components/admin/AdminGate.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -18,7 +16,7 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-29"
+        "REQ-38"
       ],
       "confidence": "high"
     }

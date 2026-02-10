@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
+  "projectStateVersion": 11,
   "summary": "Mobile-first, SEO-optimized cultural/traditional cuisine website for Ini-Abasi Restaurant and Outdoor Services featuring African & continental dishes, pastries, natural drinks, and event catering, with specified branding and key site pages plus Google Maps/local search optimization, and a full SUPER-ADMIN/OWNER dashboard that gives the restaurant owner unrestricted control over site content/settings without changing the public site design.",
   "architectural_notes": [
     "Mobile-first responsive layout as a primary requirement",
@@ -8,10 +8,13 @@
     "Design system: warm green/beige/red accents; serif headings + sans-serif body typography",
     "Site IA includes Home, Menu, Gallery, About, Contact, Order/Reserve",
     "Add a separate SUPER-ADMIN/OWNER admin panel that does not alter the public site UI.",
-    "No vendor lock-in: owner must be able to export/backup all website data and retain full access control (cannot be locked out)."
+    "No vendor lock-in: owner must be able to export/backup all website data and retain full access control (cannot be locked out).",
+    "Admin authorization system appears to rely on modules (e.g., authorization/MixinAuthorization and authorization/access-control) imported by main.mo; if these modules are missing, admin checks/bootstrapping cannot function and will always deny access."
   ],
   "known_issues": [
-    "Admin dashboard shows 'Access Denied' after attempted Internet Identity login; initial owner/super-admin bootstrap or authorization check appears not to be working as expected for first-time setup."
+    "Admin dashboard shows 'Access Denied' after attempted Internet Identity login; initial owner/super-admin bootstrap or authorization check appears not to be working as expected for first-time setup.",
+    "Admin dashboard still shows 'Access Denied' after Internet Identity login; suspected cause is missing backend authorization modules (e.g., authorization/MixinAuthorization and authorization/access-control), preventing first-admin bootstrap and causing isAdmin checks to always return false.",
+    "Automated build/implementation attempts are failing with 'AI couldn't implement/struggled with your request', blocking deployment of the authorization fix."
   ],
   "isFixRequest": true,
   "existing_features": [
@@ -206,6 +209,14 @@
         "REQ-29"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-keep-all-user-facing-admin-access-denied-text-in-english-and-ensure-the-existing-frontend-admin-gating-continues-to-work-without-editing-any-immutable-frontend-hook-files-do-not-change-frontend-src-hooks-useinternetidentity-ts-x-or-frontend-src-hooks-useactor-ts-if-any-frontend-change-is-needed-implement-it-only-in-non-immutable-files-and-keep-the-current-ux-retry-access-check-sign-out-return-to-home",
+      "title": "Keep all user-facing admin/access-denied text in English, and ensure the existing frontend admin gating continues to work without editing any immutable frontend hook files (do not change `frontend/src/hooks/useInternetIdentity.ts(x)` or `frontend/src/hooks/useActor.ts`). If any frontend change is needed, implement it only in non-immutable files and keep the current UX (Retry access check, Sign out, Return to Home).",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -276,6 +287,70 @@
       "summary": "Persist admin/owner authorization state across canister upgrades so the restaurant owner cannot be unintentionally locked out after a redeploy/upgrade; add conditional migration support if the stable authorization state schema changes.",
       "reqIds": [
         "REQ-28"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Remove the broken dependency on missing authorization modules by implementing the imported Motoko modules `authorization/MixinAuthorization` and `authorization/access-control` so `backend/main.mo` compiles without missing imports and provides the authorization behavior expected by the admin UI.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Implement a deterministic owner/admin bootstrap rule in the backend: when no owner/admin exists yet, the first authenticated Internet Identity principal that enters the admin authorization flow is automatically granted SUPER-ADMIN/owner permissions and the basic `#user` permission needed for profile actions.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Persist the owner/admin authorization state across canister upgrades using stable storage, including the bootstrap result, so the owner cannot be unintentionally locked out after redeploy/upgrade.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-34",
+      "summary": "Ensure the backend exposes and wires the exact admin status API used by the frontend (`actor.isCallerAdmin()`), and that it performs the bootstrap logic as needed (update call if mutation is required), so `frontend/src/hooks/useAdminStatus.ts` can correctly determine admin status.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-35",
+      "summary": "Create the missing Motoko authorization modules referenced by `backend/main.mo` so the backend compiles: add `backend/authorization/MixinAuthorization.mo` and `backend/authorization/access-control.mo` (matching the exact import paths `authorization/MixinAuthorization` and `authorization/access-control`).",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-36",
+      "summary": "Implement a deterministic owner/admin bootstrap in the new `authorization/access-control.mo` module: when no owner/admin exists yet, the first authenticated Internet Identity principal that hits the admin authorization flow is automatically set as the owner/admin and also granted the `#user` permission required for profile actions.",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-37",
+      "summary": "Persist authorization state across canister upgrades using stable storage (owner/admin and any permission mappings needed by the admin UI), and add conditional migration support only if required by the current project state (do not add `backend/migration.mo` unless upgrading existing stable state schema).",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-38",
+      "summary": "Expose and wire the exact backend methods expected by the existing frontend admin flow: `isCallerAdmin()` (used by `frontend/src/hooks/useAdminStatus.ts`) and `_initializeAccessControlWithSecret(adminToken)` (called from `frontend/src/hooks/useActor.ts`). These methods must work together to enable first-time admin bootstrap and subsequent admin checks.",
+      "reqIds": [
+        "REQ-37"
       ],
       "status": "pending"
     }
