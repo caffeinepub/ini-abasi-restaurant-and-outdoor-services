@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0.625rem;
+        
+        /* Warm green/beige/red palette for light mode */
+        --background: 0.98 0.01 85;
+        --foreground: 0.25 0.02 85;
+        --card: 1 0 0;
+        --card-foreground: 0.25 0.02 85;
+        --popover: 1 0 0;
+        --popover-foreground: 0.25 0.02 85;
+        
+        /* Primary: Warm green */
+        --primary: 0.45 0.12 145;
+        --primary-foreground: 0.98 0.01 85;
+        
+        /* Secondary: Warm beige */
+        --secondary: 0.88 0.04 75;
+        --secondary-foreground: 0.25 0.02 85;
+        
+        /* Muted: Light beige */
+        --muted: 0.93 0.02 75;
+        --muted-foreground: 0.50 0.03 85;
+        
+        /* Accent: Warm red */
+        --accent: 0.88 0.04 75;
+        --accent-foreground: 0.25 0.02 85;
+        
+        /* Destructive: Red */
+        --destructive: 0.55 0.22 25;
+        --destructive-foreground: 0.98 0.01 85;
+        
+        --border: 0.88 0.02 85;
+        --input: 0.88 0.02 85;
+        --ring: 0.45 0.12 145;
+        
+        /* Chart colors with warm palette */
+        --chart-1: 0.45 0.12 145;
+        --chart-2: 0.55 0.22 25;
+        --chart-3: 0.65 0.15 45;
+        --chart-4: 0.50 0.10 85;
+        --chart-5: 0.70 0.18 35;
+    }
+
+    .dark {
+        --background: 0.20 0.02 85;
+        --foreground: 0.95 0.01 85;
+        --card: 0.25 0.02 85;
+        --card-foreground: 0.95 0.01 85;
+        --popover: 0.22 0.02 85;
+        --popover-foreground: 0.95 0.01 85;
+        
+        /* Primary: Lighter warm green for dark mode */
+        --primary: 0.60 0.14 145;
+        --primary-foreground: 0.20 0.02 85;
+        
+        /* Secondary: Darker beige */
+        --secondary: 0.35 0.03 75;
+        --secondary-foreground: 0.95 0.01 85;
+        
+        /* Muted */
+        --muted: 0.30 0.02 85;
+        --muted-foreground: 0.65 0.02 85;
+        
+        /* Accent */
+        --accent: 0.35 0.03 75;
+        --accent-foreground: 0.95 0.01 85;
+        
+        /* Destructive */
+        --destructive: 0.60 0.24 25;
+        --destructive-foreground: 0.20 0.02 85;
+        
+        --border: 0.30 0.02 85;
+        --input: 0.30 0.02 85;
+        --ring: 0.60 0.14 145;
+        
+        /* Chart colors for dark mode */
+        --chart-1: 0.60 0.14 145;
+        --chart-2: 0.65 0.24 25;
+        --chart-3: 0.70 0.18 45;
+        --chart-4: 0.60 0.12 85;
+        --chart-5: 0.75 0.20 35;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-background text-foreground;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+}
+
+@layer utilities {
+    .bg-pattern {
+        background-image: url('/assets/generated/ini-abasi-pattern.dim_1200x1200.png');
+        background-size: 400px 400px;
+        background-repeat: repeat;
+        background-position: center;
+        background-blend-mode: overlay;
+    }
+}

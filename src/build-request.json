@@ -1,0 +1,75 @@
+{
+  "kind": "build_request",
+  "title": "Fix admin login bootstrap so first Internet Identity user becomes SUPER-ADMIN (resolve Access Denied)",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-27",
+      "text": "Fix the backend authorization bootstrap so that when no owner/admin exists yet, the first Internet Identity principal that accesses the admin authorization flow is automatically granted SUPER-ADMIN/owner permissions, so the admin dashboard does not show “Access Denied” for the first-time setup.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-11"
+        ],
+        "quotes": [
+          "Upon admin trying to login here is the response I got\n:Access Denied\nYou do not have permission to access the admin dashboard\nAdministrator Access Required\nThis area is restricted to authorized restaurant owners and administrators only.\nReturn to Home"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On a fresh deploy (no existing admins configured), visiting /admin and signing in with Internet Identity results in the signed-in user being treated as admin and the AdminPage renders (no Access Denied).",
+        "After the first SUPER-ADMIN is established, subsequent non-admin principals that sign in continue to see the Access Denied screen.",
+        "The backend method used by the frontend admin check (actor.isCallerAdmin()) returns true for the bootstrapped first owner and false for unauthorized principals."
+      ]
+    },
+    {
+      "id": "REQ-28",
+      "text": "Persist admin/owner authorization state across canister upgrades so the restaurant owner cannot be unintentionally locked out after a redeploy/upgrade; add conditional migration support if the stable authorization state schema changes.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-11"
+        ],
+        "quotes": [
+          "Access Denied"
+        ]
+      },
+      "acceptanceCriteria": [
+        "After establishing an owner/admin, performing a canister upgrade preserves owner/admin access (the same principal remains admin).",
+        "If stable variables are introduced/changed to support persisted authorization, backend/migration.mo is updated conditionally to initialize/convert prior state without wiping existing site data.",
+        "If authorization state cannot be migrated from prior versions, the system still guarantees a safe recovery path that prevents permanent lockout (e.g., explicit initialization state that allows first admin bootstrap only when no admins exist)."
+      ]
+    },
+    {
+      "id": "REQ-29",
+      "text": "Improve the admin access denied experience to help operators recover from misconfigured authorization: keep the existing Access Denied copy in English, and add a clear “Sign out” action plus a “Retry access check” action that re-runs the admin status query after login.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-11"
+        ],
+        "quotes": [
+          "Access Denied"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When a signed-in user sees the Access Denied screen, they can click a “Sign out” button that clears the Internet Identity session (using the existing useInternetIdentity().clear()) and returns them to the login state.",
+        "When a signed-in user clicks “Retry access check”, the admin status query is re-fetched and, if permissions have been granted (e.g., after bootstrap), the admin dashboard loads without requiring a full page reload.",
+        "All user-facing text added/changed for this requirement is in English."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor in backend/main.mo; do not introduce additional backend services.",
+    "Only create or modify backend/migration.mo if needed to preserve existing state during upgrade (conditional migration policy).",
+    "Do not edit files under frontend/src/components/ui or any paths listed in frontend.immutablePaths (compose existing components instead)."
+  ],
+  "nonGoals": [
+    "Adding third-party authentication providers (only Internet Identity is supported).",
+    "Changing the public website design or navigation as part of this fix.",
+    "Implementing new admin features (menu/gallery management, etc.) beyond resolving the admin authorization/bootstrapping issue."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

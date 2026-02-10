@@ -1,0 +1,26 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-improve-the-admin-access-denied-experience-to-help-operators-recover-from-misconfigured-authorization-keep-the-existing-access-denied-copy-in-english-and-add-a-clear-sign-out-action-plus-a-retry-access-check-action-that-re-runs-the-admin-status-query-after-login",
+      "featureTitle": "Improve the admin access denied experience to help operators recover from misconfigured authorization: keep the existing Access Denied copy in English, and add a clear “Sign out” action plus a “Retry access check” action that re-runs the admin status query after login.",
+      "files": [
+        "frontend/src/components/admin/AdminAccessDenied.tsx",
+        "frontend/src/components/admin/AdminGate.tsx",
+        "frontend/src/hooks/useAdminStatus.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-29"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

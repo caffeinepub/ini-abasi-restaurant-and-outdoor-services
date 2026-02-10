@@ -1,0 +1,50 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-10T10:17:12.304Z",
+  "summary": "Frontend implements the improved Access Denied UX with “Sign out” and “Retry access check” actions wired to Internet Identity clear() and a refetch of admin status. Backend changes show a new AccessControl/MixinAuthorization integration, but the diff summary does not provide enough evidence that first-user SUPER-ADMIN bootstrap and upgrade-safe persisted admin state (including conditional migration) are implemented.",
+  "missing_requirements": [
+    {
+      "id": "REQ-27",
+      "requirement": "Backend authorization bootstrap: when no owner/admin exists, the first Internet Identity principal accessing the admin authorization flow is automatically granted SUPER-ADMIN/owner permissions; actor.isCallerAdmin() returns true for that first owner and false for unauthorized principals thereafter.",
+      "reason": "The diff shows AccessControl state initialization and inclusion of MixinAuthorization, but does not show any explicit logic that detects the \"no admins exist\" condition and assigns the caller as SUPER-ADMIN/owner on first access, nor any evidence that isCallerAdmin() implements this bootstrap behavior.",
+      "evidence": [
+        "backend/main.mo (truncated) — shows `let accessControlState = AccessControl.initState(); include MixinAuthorization(accessControlState);` but no bootstrap logic visible"
+      ]
+    },
+    {
+      "id": "REQ-28",
+      "requirement": "Persist admin/owner authorization state across canister upgrades and add conditional migration support (backend/migration.mo if needed) to avoid lockout and preserve existing site data.",
+      "reason": "No stable variable declaration or preupgrade/postupgrade handling is shown in the truncated backend diff, and there is no evidence of updates to backend/migration.mo or any conditional migration path to preserve/convert prior authorization state.",
+      "evidence": [
+        "backend/main.mo (truncated) — comment says \"Persistent Authorization - STABLE\" but the shown declaration is `let accessControlState = AccessControl.initState()` (not shown as stable/preserved across upgrades)",
+        "File diff summary — no backend/migration.mo modified/added"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Added/expanded user profile management endpoints guarded by authorization checks (getCallerUserProfile/getUserProfile/saveCallerUserProfile).",
+      "reason": "The BuildRequest focuses on admin bootstrap/persistence and Access Denied UX; it does not request adding new user profile management capabilities.",
+      "evidence": [
+        "backend/main.mo (truncated) — `getCallerUserProfile`, `getUserProfile`, `saveCallerUserProfile` and related authorization checks"
+      ]
+    },
+    {
+      "description": "Access Denied screen includes a \"Return to Home\" action.",
+      "reason": "REQ-29 only asks to keep existing Access Denied copy and add “Sign out” + “Retry access check”. A Home navigation action was not requested.",
+      "evidence": [
+        "frontend/src/components/admin/AdminAccessDenied.tsx — Link/Button: \"Return to Home\""
+      ]
+    }
+  ],
+  "confidence": 0.64,
+  "changed_files": [
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/src/components/admin/AdminAccessDenied.tsx",
+    "frontend/src/components/admin/AdminGate.tsx",
+    "frontend/src/hooks/useAdminStatus.ts",
+    "project_state.json"
+  ]
+}

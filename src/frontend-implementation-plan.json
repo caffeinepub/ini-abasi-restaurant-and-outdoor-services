@@ -1,0 +1,33 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Admin Access Denied recovery actions (sign out + retry access check)",
+  "requirements": [
+    {
+      "id": "REQ-29",
+      "summary": "Enhance the Admin Access Denied screen with English-only recovery actions: Sign out (clears Internet Identity session) and Retry access check (re-fetches admin status without reload).",
+      "acceptanceCriteria": [
+        "When a signed-in user sees the Access Denied screen, they can click a “Sign out” button that clears the Internet Identity session (using the existing useInternetIdentity().clear()) and returns them to the login state.",
+        "When a signed-in user clicks “Retry access check”, the admin status query is re-fetched and, if permissions have been granted (e.g., after bootstrap), the admin dashboard loads without requiring a full page reload.",
+        "All user-facing text added/changed for this requirement is in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/admin/AdminAccessDenied.tsx",
+          "operation": "modify",
+          "description": "Update AdminAccessDenied to render two new actions while keeping existing English copy: (1) “Sign out” button (invokes a passed handler) and (2) “Retry access check” button (invokes a passed handler, supports a loading/disabled state). Compose existing shadcn-ui Button/Card/Alert components; do not modify any files under frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/admin/AdminGate.tsx",
+          "operation": "modify",
+          "description": "Wire the new AdminAccessDenied actions: when authenticated but not admin, pass handlers that (a) call useInternetIdentity().clear() and clear react-query cache to return to login state, and (b) re-run the admin status query (useAdminStatus().refetch and/or react-query invalidation) so newly granted permissions load the admin dashboard without a full page reload. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useAdminStatus.ts",
+          "operation": "modify",
+          "description": "Ensure the admin status hook exposes what AdminGate needs for retry UX (e.g., refetch function and an isFetching/isRefetching flag surfaced alongside isAdmin/isLoading) while preserving current behavior of treating trapped authorization calls as non-admin. Verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}

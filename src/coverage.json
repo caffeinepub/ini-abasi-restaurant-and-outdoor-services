@@ -1,0 +1,58 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-10T10:17:12.307Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 3,
+    "implemented": 1,
+    "items": [
+      {
+        "id": "REQ-27",
+        "summary": "Fix the backend authorization bootstrap so that when no owner/admin exists yet, the first Internet Identity principal that accesses the admin authorization flow is automatically granted SUPER-ADMIN/owner permissions, so the admin dashboard does not show “Access Denied” for the first-time setup.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-28",
+        "summary": "Persist admin/owner authorization state across canister upgrades so the restaurant owner cannot be unintentionally locked out after a redeploy/upgrade; add conditional migration support if the stable authorization state schema changes.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-29",
+        "summary": "Improve the admin access denied experience to help operators recover from misconfigured authorization: keep the existing Access Denied copy in English, and add a clear “Sign out” action plus a “Retry access check” action that re-runs the admin status query after login.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/admin/AdminAccessDenied.tsx",
+          "frontend/src/components/admin/AdminGate.tsx",
+          "frontend/src/hooks/useAdminStatus.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/admin/AdminAccessDenied.tsx",
+          "frontend/src/components/admin/AdminGate.tsx",
+          "frontend/src/hooks/useAdminStatus.ts"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/components/admin/AdminAccessDenied.tsx",
+    "frontend/src/components/admin/AdminGate.tsx",
+    "frontend/src/hooks/useAdminStatus.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

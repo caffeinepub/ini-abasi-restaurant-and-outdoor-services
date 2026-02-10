@@ -1,0 +1,286 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "Mobile-first, SEO-optimized cultural/traditional cuisine website for Ini-Abasi Restaurant and Outdoor Services featuring African & continental dishes, pastries, natural drinks, and event catering, with specified branding and key site pages plus Google Maps/local search optimization, and a full SUPER-ADMIN/OWNER dashboard that gives the restaurant owner unrestricted control over site content/settings without changing the public site design.",
+  "architectural_notes": [
+    "Mobile-first responsive layout as a primary requirement",
+    "Local SEO focus including Google Maps integration/optimization",
+    "Design system: warm green/beige/red accents; serif headings + sans-serif body typography",
+    "Site IA includes Home, Menu, Gallery, About, Contact, Order/Reserve",
+    "Add a separate SUPER-ADMIN/OWNER admin panel that does not alter the public site UI.",
+    "No vendor lock-in: owner must be able to export/backup all website data and retain full access control (cannot be locked out)."
+  ],
+  "known_issues": [
+    "Admin dashboard shows 'Access Denied' after attempted Internet Identity login; initial owner/super-admin bootstrap or authorization check appears not to be working as expected for first-time setup."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-create-a-mobile-first-responsive-website-for-ini-abasi-restaurant-and-outdoor-services-with-a-consistent-global-layout-header-navigation-footer-and-client-side-routing-for-these-pages-home-menu-gallery-about-contact-and-order-reserve",
+      "title": "Create a mobile-first, responsive website for “Ini-Abasi Restaurant and Outdoor Services” with a consistent global layout (header navigation + footer) and client-side routing for these pages: Home, Menu, Gallery, About, Contact, and Order/Reserve.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-the-requested-brand-styling-across-the-entire-site-warm-green-beige-and-red-accents-friendly-serif-headings-clean-sans-serif-body-text-with-an-overall-cohesive-culturally-inspired-visual-theme-e-g-subtle-textile-pattern-accents-warm-food-photography-framing-implemented-consistently",
+      "title": "Apply the requested brand styling across the entire site: warm green, beige, and red accents; friendly serif headings; clean sans-serif body text; with an overall cohesive, culturally-inspired visual theme (e.g., subtle textile/pattern accents, warm food photography framing) implemented consistently.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-seo-foundations-for-a-react-spa-per-page-unique-title-and-meta-description-canonical-url-support-open-graph-twitter-card-tags-and-semantic-heading-structure-on-each-page-h1-h2",
+      "title": "Implement SEO foundations for a React SPA: per-page unique title and meta description, canonical URL support, Open Graph + Twitter card tags, and semantic heading structure on each page (H1/H2).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-optimize-for-google-maps-and-local-search-by-adding-a-dedicated-find-us-section-home-and-or-contact-that-embeds-google-maps-via-iframe-and-add-localbusiness-restaurant-structured-data-json-ld-with-nap-fields-name-address-phone-opening-hours-and-cuisine-service-keywords-relevant-to-african-and-continental-dishes-and-catering",
+      "title": "Optimize for Google Maps and local search by adding a dedicated “Find Us” section (Home and/or Contact) that embeds Google Maps via iframe, and add LocalBusiness/Restaurant structured data (JSON-LD) with NAP fields (name, address, phone), opening hours, and cuisine/service keywords relevant to African and continental dishes and catering.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-home-page-content-to-highlight-african-dishes-continental-dishes-pastries-natural-drinks-and-event-catering-include-a-hero-section-featured-categories-and-clear-calls-to-action-to-menu-order-reserve-and-contact",
+      "title": "Build the Home page content to highlight: African dishes, continental dishes, pastries, natural drinks, and event catering; include a hero section, featured categories, and clear calls-to-action to Menu, Order/Reserve, and Contact.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-menu-page-with-filterable-categories-african-dishes-continental-dishes-pastries-natural-drinks-catering-packages-using-a-structured-menu-dataset-stored-in-the-frontend-no-hardcoded-repeated-markup",
+      "title": "Create a Menu page with filterable categories (African dishes, Continental dishes, Pastries, Natural drinks, Catering packages) using a structured menu dataset stored in the frontend (no hardcoded repeated markup).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-gallery-page-that-displays-a-responsive-grid-of-images-with-accessible-alt-text-and-a-lightbox-modal-preview-for-viewing-images-larger",
+      "title": "Create a Gallery page that displays a responsive grid of images with accessible alt text and a lightbox/modal preview for viewing images larger.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-about-page-describing-ini-abasi-restaurant-and-outdoor-services-emphasizing-cultural-traditional-cuisine-quality-ingredients-and-outdoor-event-service-capability-with-sections-for-mission-values-and-services",
+      "title": "Create an About page describing Ini-Abasi Restaurant and Outdoor Services, emphasizing cultural/traditional cuisine, quality ingredients, and outdoor/event service capability, with sections for mission/values and services.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-contact-page-with-a-contact-form-name-phone-email-message-prominent-click-to-call-phone-link-and-email-link-and-a-clear-location-block-address-placeholders-plus-the-embedded-map",
+      "title": "Create a Contact page with a contact form (name, phone/email, message), prominent click-to-call phone link and email link, and a clear location block (address placeholders) plus the embedded map.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-order-reserve-page-that-supports-a-table-reservation-requests-and-b-catering-event-service-requests-each-with-its-own-form-and-appropriate-fields-date-time-party-size-event-type-location-notes-contact-info",
+      "title": "Create an Order/Reserve page that supports (a) table reservation requests and (b) catering/event service requests, each with its own form and appropriate fields (date/time, party size, event type, location, notes, contact info).",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-connect-the-frontend-contact-and-order-reserve-forms-to-the-backend-using-react-query-mutations-including-loading-states-error-handling-and-user-friendly-success-feedback",
+      "title": "Connect the frontend Contact and Order/Reserve forms to the backend using React Query mutations, including loading states, error handling, and user-friendly success feedback.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-static-seo-support-files-robots-txt-and-sitemap-xml-with-routes-for-home-menu-gallery-about-contact-order-reserve-and-ensure-they-are-served-as-static-assets-from-the-frontend",
+      "title": "Add static SEO support files: robots.txt and sitemap.xml (with routes for Home, Menu, Gallery, About, Contact, Order/Reserve) and ensure they are served as static assets from the frontend.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-and-render-required-generated-brand-images-as-static-assets-under-frontend-public-assets-generated-and-use-them-in-the-ui-logo-in-header-footer-hero-image-on-home-gallery-images-on-gallery",
+      "title": "Add and render required generated brand images as static assets under frontend/public/assets/generated and use them in the UI (logo in header/footer, hero image on Home, gallery images on Gallery).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-protected-super-admin-owner-area-dashboard-accessible-only-after-internet-identity-login-with-a-clear-unauthorized-state-for-non-owners",
+      "title": "Add a protected SUPER-ADMIN / OWNER area (dashboard) accessible only after Internet Identity login, with a clear unauthorized state for non-owners.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-move-website-editable-content-and-settings-into-backend-managed-data-models-while-preserving-current-public-site-design-including-menu-categories-items-prices-gallery-items-metadata-opening-hours-location-nap-whatsapp-call-order-buttons-config-seo-metadata-titles-descriptions-keywords-promotions-banners-and-custom-pages-list",
+      "title": "Move website-editable content and settings into backend-managed data models (while preserving current public-site design), including: menu categories/items/prices, gallery items/metadata, opening hours/location/NAP, WhatsApp/call/order buttons config, SEO metadata (titles/descriptions/keywords), promotions/banners, and custom pages list.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-admin-ui-for-managing-menu-categories-and-menu-items-including-price-edits-with-create-edit-delete-ordering-and-validation",
+      "title": "Build an admin UI for managing menu categories and menu items (including price edits) with create/edit/delete, ordering, and validation.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-admin-ui-for-managing-the-gallery-add-edit-remove-reorder-gallery-entries-including-image-url-path-plus-alt-text-caption-and-category",
+      "title": "Build an admin UI for managing the gallery (add/edit/remove/reorder gallery entries) including image URL/path plus alt text, caption, and category.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-admin-ui-for-editing-opening-hours-and-location-contact-settings-nap-and-ensure-all-public-references-update-accordingly-footer-contact-page-blocks-map-embed-structured-data",
+      "title": "Build an admin UI for editing opening hours and location/contact settings (NAP) and ensure all public references update accordingly (footer, contact page blocks, map embed, structured data).",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-admin-controls-for-whatsapp-call-and-order-buttons-visibility-toggles-labels-and-target-links-phone-numbers-and-wire-the-public-site-to-use-these-settings-without-changing-the-current-public-design",
+      "title": "Add admin controls for WhatsApp, call, and order buttons (visibility toggles, labels, and target links/phone numbers) and wire the public site to use these settings without changing the current public design.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-admin-seo-management-to-edit-per-page-meta-title-description-and-keywords-and-ensure-the-existing-seo-hook-uses-backend-managed-values",
+      "title": "Add admin SEO management to edit per-page meta title, description, and keywords, and ensure the existing SEO hook uses backend-managed values.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-admin-page-management-to-add-or-remove-custom-pages-and-update-routing-navigation-to-render-these-pages-without-altering-the-existing-public-site-s-styling",
+      "title": "Add admin page management to add or remove custom pages, and update routing/navigation to render these pages without altering the existing public site’s styling.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-admin-management-for-promotions-and-banners-with-enable-disable-scheduling-optional-and-ordering-and-render-them-on-the-public-site-in-a-way-that-does-not-change-the-existing-public-design-language",
+      "title": "Add admin management for promotions and banners with enable/disable, scheduling (optional), and ordering, and render them on the public site in a way that does not change the existing public design language.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-complete-export-backup-feature-for-the-owner-to-download-all-website-data-in-a-non-proprietary-format-and-provide-an-import-restore-option-to-prevent-vendor-lock-in",
+      "title": "Implement a complete export/backup feature for the owner to download all website data in a non-proprietary format, and provide an import/restore option to prevent vendor lock-in.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-the-admin-access-denied-experience-to-help-operators-recover-from-misconfigured-authorization-keep-the-existing-access-denied-copy-in-english-and-add-a-clear-sign-out-action-plus-a-retry-access-check-action-that-re-runs-the-admin-status-query-after-login",
+      "title": "Improve the admin access denied experience to help operators recover from misconfigured authorization: keep the existing Access Denied copy in English, and add a clear “Sign out” action plus a “Retry access check” action that re-runs the admin status query after login.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create mobile-first restaurant website with pages: Home, Menu, Gallery, About, Contact, and Order/Reserve",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Implement SEO optimization for local search, including Google Maps optimization",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Apply branding/theme: warm green, beige, and red accents; friendly serif headings with clean sans-serif body text",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Add content structure to highlight African & continental dishes, pastries, natural drinks, and event catering services",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Implement a Motoko backend to accept and persist Contact, Reservation, and Catering/Event submissions, with timestamped records and simple rate-limiting per caller (best-effort) to reduce spam.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Build a SUPER-ADMIN/OWNER dashboard (no public-site design changes) with unrestricted owner permissions: manage menus/prices/categories, gallery/images, opening hours/location, WhatsApp/call/order buttons, SEO metadata/keywords, add/remove pages, promotions/banners, and export/backup all site data; ensure no vendor lock-in and owner cannot be locked out.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Implement owner (super-admin) authorization in the Motoko backend, including an initialization/recovery flow that ensures the restaurant owner cannot be permanently locked out of admin access.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Add conditional Motoko stable storage + upgrade migration support for the new admin-managed data, preserving existing submissions features (contact, reservations, catering events) and ensuring upgrades do not wipe state.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Fix the backend authorization bootstrap so that when no owner/admin exists yet, the first Internet Identity principal that accesses the admin authorization flow is automatically granted SUPER-ADMIN/owner permissions, so the admin dashboard does not show “Access Denied” for the first-time setup.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Persist admin/owner authorization state across canister upgrades so the restaurant owner cannot be unintentionally locked out after a redeploy/upgrade; add conditional migration support if the stable authorization state schema changes.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Ini-Abasi Restaurant and Outdoor Services",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
